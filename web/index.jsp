@@ -11,6 +11,13 @@
     <title>$Title$</title>
   </head>
   <body>
-  $END$
+
+  <script src='https://ccmjs.github.io/mkaul-components/parkhaus/versions/ccm.parkhaus-7.0.0.js'>
+
+  </script><ccm-parkhaus-7-0-0 key='{"server_url":""}'>
+
+  </ccm-parkhaus-7-0-0>
+
+
   </body>
 </html>
