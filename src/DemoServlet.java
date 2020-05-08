@@ -10,24 +10,30 @@ import java.io.*;
 public class DemoServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Float sum = getPersistentSum();
+        String body = getBody( request );
+        System.out.println( body );
+        String[] params = body.split(",");
+        String event = params[0];
+        String priceString = params[4];
+        if ( ! "_".equals( priceString ) ){
+        // strip € in front, parse the number behind
+            float price = Integer.parseInt(priceString)/100.0f; //Float.parseFloat( priceString.split(" ")[2] );
+            sum += price;
+            // store sum persistently in ServletContext
+            getApplication().setAttribute("sum", sum );
+        }
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println( sum );
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-/*        System.out.println( request.getQueryString() );
-        //String[] Parameter = request.getQueryString().split("=");
-        String Command = request.getQueryString();
-        if ("Summe".equals(Command)) {
-            Float sum = getPersistentSum();
-            PrintWriter out = response.getWriter();
-            out.println(sum);
-            System.out.println("Summe = "+sum);
-        }*/
         String[] requestParamString = request.getQueryString().split("=");
         String command = requestParamString[0];
         String param = requestParamString[1];
-        if ( "cmd".equals( command ) && "sum".equals( param ) ) {
+        if ( "cmd".equals( command ) && "Summe".equals( param ) ) {
             Float sum = getPersistentSum();
-
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
             out.println(sum);
@@ -50,8 +56,11 @@ public class DemoServlet extends HttpServlet {
     }
 
     private static String getBody(HttpServletRequest request) throws IOException {
+
+        String body = null;
         StringBuilder stringBuilder = new StringBuilder();
         BufferedReader bufferedReader = null;
+
         try {
             InputStream inputStream = request.getInputStream();
             if (inputStream != null) {
