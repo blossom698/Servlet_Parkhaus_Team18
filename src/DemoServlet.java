@@ -22,6 +22,8 @@ public class DemoServlet extends HttpServlet {
 
         if (event.equals("leave")) {
             String priceString = params[4];
+            String timeString = params[3];
+            Float timeAvg = getPersistentTimeAvg(Float.parseFloat(timeString));
             counter++;
             getApplication().setAttribute("counter", counter);
 
@@ -79,6 +81,18 @@ public class DemoServlet extends HttpServlet {
         sum = (Float) application.getAttribute("sum");
         if ( counter == null ) return  0.0f;
         return sum / counter ;
+    }
+
+    private Float getPersistentTimeAvg(Float addTime) {
+        ServletContext application = getApplication();
+        Float timeSum = (Float) application.getAttribute("timeSum");
+        Float counter = (Float) application.getAttribute("counter");
+        if (timeSum == null) timeSum = 0.0f;
+        if (counter == null) return  0.0f;
+        if (addTime != null) {
+            application.setAttribute("timeSum", timeSum+addTime);
+        }
+        return timeSum/counter;
     }
 
 
