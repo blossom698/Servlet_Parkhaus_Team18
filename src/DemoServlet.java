@@ -10,19 +10,22 @@ import java.io.*;
 public class DemoServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer counter = (Integer) getApplication().getAttribute("counter");
-        if (counter==null) counter = 0;
+        Float counter = (Float) getApplication().getAttribute("counter");
+        if (counter==null) counter = 0.0f;
         Float sum = getPersistentSum();
         String body = getBody(request);
+
         System.out.println(body);
+
         String[] params = body.split(",");
         String event = params[0];
+
         if (event.equals("leave")) {
             String priceString = params[4];
             counter++;
             getApplication().setAttribute("counter", counter);
 
-            float price = Integer.parseInt(priceString) / 100.0f; //Float.parseFloat( priceString.split(" ")[2] );
+            float price = Integer.parseInt(priceString) / 100.0f;
             sum += price;
             // store sum persistently in ServletContext
             getApplication().setAttribute("sum", sum);
@@ -49,7 +52,7 @@ public class DemoServlet extends HttpServlet {
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
             out.println(avg);
-
+            System.out.println("avg = "+avg);
 
         } else {
             System.out.println("Invalid Command: " + request.getQueryString());
@@ -72,7 +75,7 @@ public class DemoServlet extends HttpServlet {
     private Float getPersistentAvg(){
         Float counter,sum;
         ServletContext application = getApplication();
-        counter  = (Float)application.getAttribute("counter");
+        counter  = (Float) application.getAttribute("counter");
         sum = (Float) application.getAttribute("sum");
         if ( counter == null ) return  0.0f;
         return sum / counter ;
