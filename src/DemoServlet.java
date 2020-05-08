@@ -9,15 +9,43 @@ import java.io.*;
 @WebServlet("/DemoServlet")
 public class DemoServlet extends HttpServlet {
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+/*        System.out.println( request.getQueryString() );
+        //String[] Parameter = request.getQueryString().split("=");
+        String Command = request.getQueryString();
+        if ("Summe".equals(Command)) {
+            Float sum = getPersistentSum();
+            PrintWriter out = response.getWriter();
+            out.println(sum);
+            System.out.println("Summe = "+sum);
+        }*/
+        String[] requestParamString = request.getQueryString().split("=");
+        String command = requestParamString[0];
+        String param = requestParamString[1];
+        if ( "cmd".equals( command ) && "sum".equals( param ) ) {
+            Float sum = getPersistentSum();
+
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println(sum);
+
+            System.out.println("sum = " + sum);
+        }else {
+            System.out.println( "Invalid Command: " + request.getQueryString() );
+        }
+    }
     private ServletContext getApplication(){
         return getServletConfig().getServletContext();
     }
 
-    private Float getPersistentSum() {
+    private Float getPersistentSum(){
         Float sum;
         ServletContext application = getApplication();
-        sum = (Float) application.getAttribute("sum");
-        if (sum == null) sum = 0.0f;
+        sum = (Float)application.getAttribute("sum");
+        if ( sum == null ) sum = 0.0f;
         return sum;
     }
 
@@ -44,42 +72,4 @@ public class DemoServlet extends HttpServlet {
         return stringBuilder.toString();
     }
 
-
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        if (request.getParameter("Summe") != null) {
-
-
-            Float sum = getPersistentSum();
-            String body = getBody(request);
-            System.out.println(body);
-            String[] params = body.split(",");
-            String event = params[0];
-            String priceString = params[5];
-            if (!"_".equals(priceString)) {
-                // strip € in front, parse the number behind
-                float price = Float.parseFloat(priceString.split(" ")[2]);
-                sum += price;
-                // store sum persistently in ServletContext
-                getApplication().setAttribute("sum", sum);
-            }
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-            out.println(sum);
-
-        }
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println( request.getQueryString() );
-        //String[] Parameter = request.getQueryString().split("=");
-        String Command = request.getQueryString();
-        if ("Summe".equals(Command)) {
-            Float sum = getPersistentSum();
-            PrintWriter out = response.getWriter();
-            out.println(sum);
-            System.out.println("Summe = "+sum);
-        }
-    }
 }
