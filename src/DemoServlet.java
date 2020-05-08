@@ -10,6 +10,7 @@ import java.io.*;
 public class DemoServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer counter = (Integer) getApplication().getAttribute("counter");
         Float sum = getPersistentSum();
         String body = getBody( request );
         System.out.println( body );
@@ -57,13 +58,15 @@ public class DemoServlet extends HttpServlet {
         return sum;
     }
 
+/*
     private Float getPersistentAvg(){
         Float avg;
         ServletContext application = getApplication();
-        avg = (Float)application.getAttribute("sum");
+        avg = (Float)application.getAttribute("");
         if ( avg == null ) avg = 0.0f;
         return avg;
     }
+*/
 
 
     private static String getBody(HttpServletRequest request) throws IOException {
