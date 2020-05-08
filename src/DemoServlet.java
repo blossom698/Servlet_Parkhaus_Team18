@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
-@WebServlet(name = "DemoServlet")
+@WebServlet("/DemoServlet")
 public class DemoServlet extends HttpServlet {
 
     private ServletContext getApplication(){
@@ -72,6 +72,14 @@ public class DemoServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        System.out.println( request.getQueryString() );
+        //String[] Parameter = request.getQueryString().split("=");
+        String Command = request.getQueryString();
+        if ("Summe".equals(Command)) {
+            Float sum = getPersistentSum();
+            PrintWriter out = response.getWriter();
+            out.println(sum);
+            System.out.println("Summe = "+sum);
+        }
     }
 }
