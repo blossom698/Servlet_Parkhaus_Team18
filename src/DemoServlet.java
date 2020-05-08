@@ -11,23 +11,25 @@ public class DemoServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer counter = (Integer) getApplication().getAttribute("counter");
+        if (counter==null) counter = 0;
         Float sum = getPersistentSum();
-        String body = getBody( request );
-        System.out.println( body );
+        String body = getBody(request);
+        System.out.println(body);
         String[] params = body.split(",");
         String event = params[0];
-        if (event.equals("leave")){
+        if (event.equals("leave")) {
             String priceString = params[4];
-            if ( ! "_".equals( priceString ) ){
-                // strip € in front, parse the number behind
-                float price = Integer.parseInt(priceString)/100.0f; //Float.parseFloat( priceString.split(" ")[2] );
-                sum += price;
-                // store sum persistently in ServletContext
-                getApplication().setAttribute("sum", sum );
-            }
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.println( sum );
+            counter++;
+            getApplication().setAttribute("counter", counter);
+
+            float price = Integer.parseInt(priceString) / 100.0f; //Float.parseFloat( priceString.split(" ")[2] );
+            sum += price;
+            // store sum persistently in ServletContext
+            getApplication().setAttribute("sum", sum);
+
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println(sum);
         }
     }
 
@@ -35,38 +37,47 @@ public class DemoServlet extends HttpServlet {
         String[] requestParamString = request.getQueryString().split("=");
         String command = requestParamString[0];
         String param = requestParamString[1];
-        if ( "cmd".equals( command ) && "Summe".equals( param ) ) {
+        if ("cmd".equals(command) && "Summe".equals(param)) {
             Float sum = getPersistentSum();
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
             out.println(sum);
 
             System.out.println("sum = " + sum);
-        }else {
-            System.out.println( "Invalid Command: " + request.getQueryString() );
+        } else if("cmd".equals(command)&& "avg".equals(param)) {
+            Float avg = getPersistentAvg();
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println(avg);
+
+
+        } else {
+            System.out.println("Invalid Command: " + request.getQueryString());
         }
     }
-    private ServletContext getApplication(){
+
+    private ServletContext getApplication() {
         return getServletConfig().getServletContext();
     }
 
-    private Float getPersistentSum(){
+    private Float getPersistentSum() {
         Float sum;
         ServletContext application = getApplication();
-        sum = (Float)application.getAttribute("sum");
-        if ( sum == null ) sum = 0.0f;
+        sum = (Float) application.getAttribute("sum");
+        if (sum == null) sum = 0.0f;
         return sum;
     }
 
-/*
+
     private Float getPersistentAvg(){
-        Float avg;
+        Float counter,sum;
         ServletContext application = getApplication();
-        avg = (Float)application.getAttribute("");
-        if ( avg == null ) avg = 0.0f;
-        return avg;
+        counter  = (Float)application.getAttribute("counter");
+        sum = (Float) application.getAttribute("sum");
+        if ( counter == null ) return  0.0f;
+        return sum / counter ;
     }
-*/
+
 
 
     private static String getBody(HttpServletRequest request) throws IOException {
