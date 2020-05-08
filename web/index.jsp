@@ -17,7 +17,7 @@
 
   <ccm-parkhaus-7-0-0
           server_url="${pageContext.request.contextPath}/DemoServlet"
-          extra_buttons='["Summe","avg","avg Time"]'>
+          extra_buttons='["Summe","avg","avg_time"]'>
 
   </ccm-parkhaus-7-0-0>
   </body>

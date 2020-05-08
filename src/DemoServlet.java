@@ -42,20 +42,20 @@ public class DemoServlet extends HttpServlet {
         String[] requestParamString = request.getQueryString().split("=");
         String command = requestParamString[0];
         String param = requestParamString[1];
+        PrintWriter out = response.getWriter();
+        response.setContentType("text/html");
         if ("cmd".equals(command) && "Summe".equals(param)) {
             Float sum = getPersistentSum();
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
             out.println(sum);
-
             System.out.println("sum = " + sum);
         } else if("cmd".equals(command)&& "avg".equals(param)) {
             Float avg = getPersistentAvg();
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
             out.println(avg);
             System.out.println("avg = "+avg);
-
+        } else if ("cmd".equals(command) && "avg_time".equals(param)) {
+            Float avg_time = getPersistentAvgTime(null);
+            out.println(avg_time);
+            System.out.println("avg_time = "+avg_time);
         } else {
             System.out.println("Invalid Command: " + request.getQueryString());
         }
@@ -83,7 +83,7 @@ public class DemoServlet extends HttpServlet {
         return sum / counter ;
     }
 
-    private Float getPersistentTimeAvg(Float addTime) {
+    private Float getPersistentAvgTime(Float addTime) {
         ServletContext application = getApplication();
         Float timeSum = (Float) application.getAttribute("timeSum");
         Float counter = (Float) application.getAttribute("counter");
