@@ -15,17 +15,19 @@ public class DemoServlet extends HttpServlet {
         System.out.println( body );
         String[] params = body.split(",");
         String event = params[0];
-        String priceString = params[4];
-        if ( ! "_".equals( priceString ) ){
-        // strip € in front, parse the number behind
-            float price = Integer.parseInt(priceString)/100.0f; //Float.parseFloat( priceString.split(" ")[2] );
-            sum += price;
-            // store sum persistently in ServletContext
-            getApplication().setAttribute("sum", sum );
-        }
+        if (event.equals("leave")){
+            String priceString = params[4];
+            if ( ! "_".equals( priceString ) ){
+                // strip € in front, parse the number behind
+                float price = Integer.parseInt(priceString)/100.0f; //Float.parseFloat( priceString.split(" ")[2] );
+                sum += price;
+                // store sum persistently in ServletContext
+                getApplication().setAttribute("sum", sum );
+            }
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         out.println( sum );
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -54,6 +56,15 @@ public class DemoServlet extends HttpServlet {
         if ( sum == null ) sum = 0.0f;
         return sum;
     }
+
+    private Float getPersistentAvg(){
+        Float avg;
+        ServletContext application = getApplication();
+        avg = (Float)application.getAttribute("sum");
+        if ( avg == null ) avg = 0.0f;
+        return avg;
+    }
+
 
     private static String getBody(HttpServletRequest request) throws IOException {
 
