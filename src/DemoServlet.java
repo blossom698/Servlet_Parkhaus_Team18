@@ -5,13 +5,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import javax.json.*;
 
 @WebServlet("/DemoServlet")
 public class DemoServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Float counter = (Float) getApplication().getAttribute("counter");
-        if (counter==null) counter = 0.0f;
+        if (counter == null) counter = 0.0f;
         Float sum = getPersistentSum();
         String body = getBody(request);
 
@@ -46,21 +47,40 @@ public class DemoServlet extends HttpServlet {
         String param = requestParamString[1];
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
-        if ("cmd".equals(command) && "Summe".equals(param)) {
-            Float sum = getPersistentSum();
-            out.println(sum);
-            System.out.println("sum = " + sum);
-        } else if("cmd".equals(command)&& "avg".equals(param)) {
-            Float avg = getPersistentAvg();
-            out.println(avg);
-            System.out.println("avg = "+avg);
-        } else if ("cmd".equals(command) && "avg_time".equals(param)) {
-            Float avg_time = getPersistentAvgTime(null);
-            out.println(avg_time);
-            System.out.println("avg_time = "+avg_time);
-        } else {
-            System.out.println("Invalid Command: " + request.getQueryString());
+
+        switch (request.getParameter("cmd")) {
+            case "Summe":
+                Float sum = getPersistentSum();
+                out.println(sum);
+                System.out.println("sum = " + sum);
+                break;
+            case "avg":
+                Float avg = getPersistentAvg();
+                out.println(avg);
+                System.out.println("avg = " + avg);
+                break;
+            case "avg_time":
+                Float avg_time = getPersistentAvgTime(null);
+                out.println(avg_time);
+                System.out.println("avg_time = " + avg_time);
+                break;
+
+                /*
+            case "chart":
+
+                JsonObject root = Json.createObjectBuilder()
+                        .add("data",Json.createArrayBuilder()
+                                .add(Json.createObjectBuilder()
+                                        .add("x",Car.asNrArray(cars()))
+
+
+               */
+
+            default:
+                System.out.println("Invalid Command: " + request.getQueryString());
         }
+
+
     }
 
     private ServletContext getApplication() {
@@ -76,13 +96,13 @@ public class DemoServlet extends HttpServlet {
     }
 
 
-    private Float getPersistentAvg(){
-        Float counter,sum;
+    private Float getPersistentAvg() {
+        Float counter, sum;
         ServletContext application = getApplication();
-        counter  = (Float) application.getAttribute("counter");
+        counter = (Float) application.getAttribute("counter");
         sum = (Float) application.getAttribute("sum");
-        if ( counter == null ) return  0.0f;
-        return sum / counter ;
+        if (counter == null) return 0.0f;
+        return sum / counter;
     }
 
     private Float getPersistentAvgTime(Float addTime) {
@@ -90,15 +110,14 @@ public class DemoServlet extends HttpServlet {
         Float timeSum = (Float) application.getAttribute("timeSum");
         Float counter = (Float) application.getAttribute("counter");
         if (timeSum == null) timeSum = 0.0f;
-        if (counter == null) return  0.0f;
+        if (counter == null) return 0.0f;
 
         if (addTime != null) {
-            application.setAttribute("timeSum", timeSum+addTime);
+            application.setAttribute("timeSum", timeSum + addTime);
         }
 
-        return (Float)application.getAttribute("timeSum")/counter;
+        return (Float) application.getAttribute("timeSum") / counter;
     }
-
 
 
     private static String getBody(HttpServletRequest request) throws IOException {
