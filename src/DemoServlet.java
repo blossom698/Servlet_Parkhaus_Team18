@@ -5,12 +5,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
 import javax.json.*;
 
 @WebServlet("/DemoServlet")
 public class DemoServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         Float counter = (Float) getApplication().getAttribute("counter");
         if (counter == null) counter = 0.0f;
         Float sum = getPersistentSum();
@@ -24,6 +26,17 @@ public class DemoServlet extends HttpServlet {
         if (event.equals("leave")) {
             String priceString = params[4];
             String timeString = params[3];
+            int id = Integer.parseInt(params[1]);
+            long ankunft = Long.parseLong(params[2]);
+            long dauer = Long.parseLong(params[2]);
+            int platz = Integer.parseInt(params[7]);
+
+            ArrayList<CarIF> autos = (ArrayList<CarIF>) getApplication().getAttribute("autos");
+            if (autos == null) getApplication().setAttribute("autos", new ArrayList<CarIF>());
+
+            Car auto = new Car(id, ankunft, dauer, platz);
+
+            autos.add(auto);
 
             counter++;
             getApplication().setAttribute("counter", counter);
@@ -65,16 +78,14 @@ public class DemoServlet extends HttpServlet {
                 System.out.println("avg_time = " + avg_time);
                 break;
 
-                /*
+
             case "chart":
 
                 JsonObject root = Json.createObjectBuilder()
                         .add("data",Json.createArrayBuilder()
                                 .add(Json.createObjectBuilder()
-                                        .add("x",Car.asNrArray(cars()))
+                                        .add("x",Car.asNrArray(cars()))));
 
-
-               */
 
             default:
                 System.out.println("Invalid Command: " + request.getQueryString());
@@ -94,7 +105,6 @@ public class DemoServlet extends HttpServlet {
         if (sum == null) sum = 0.0f;
         return sum;
     }
-
 
     private Float getPersistentAvg() {
         Float counter, sum;
@@ -144,6 +154,15 @@ public class DemoServlet extends HttpServlet {
             }
         }
         return stringBuilder.toString();
+    }
+
+    private ArrayList<CarIF> cars(){
+        ArrayList<CarIF> zw= (ArrayList<CarIF>)getApplication().getAttribute("autos");
+        if(zw==null){
+            zw= new ArrayList<CarIF>();
+            getApplication().setAttribute("autos",zw);
+        }
+        return zw;
     }
 
 }
