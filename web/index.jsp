@@ -12,16 +12,16 @@
   </head>
   <body>
 
-  <script src='https://ccmjs.github.io/mkaul-components/parkhaus/versions/ccm.parkhaus-7.0.0.js'>
+  <script src='https://ccmjs.github.io/mkaul-components/parkhaus/versions/ccm.parkhaus-9.0.0.js'>
   </script>
 
-  <ccm-parkhaus-7-0-0
+  <ccm-parkhaus-9-0-0
           server_url="${pageContext.request.contextPath}/DemoServlet"
           license_max="30"
           client_categories='["any","Familie","Frauen"]'
           extra_buttons='["Summe","avg","avg_time"]'
-          extra_charts='["chart", "familyChart"]'>
+          extra_charts='["chart"]'>
 
-  </ccm-parkhaus-7-0-0>
+  </ccm-parkhaus-9-0-0>
   </body>
 </html>

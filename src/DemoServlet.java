@@ -32,7 +32,10 @@ public class DemoServlet extends HttpServlet {
             int platz = Integer.parseInt(params[7]);
 
             ArrayList<CarIF> autos = (ArrayList<CarIF>) getApplication().getAttribute("autos");
-            if (autos == null) getApplication().setAttribute("autos", new ArrayList<CarIF>());
+            if (autos == null) {
+                getApplication().setAttribute("autos", new ArrayList<CarIF>());
+                autos = (ArrayList<CarIF>) getApplication().getAttribute("autos");
+            }
 
             Car auto = new Car(id, ankunft, dauer, platz);
 
@@ -78,13 +81,50 @@ public class DemoServlet extends HttpServlet {
                 System.out.println("avg_time = " + avg_time);
                 break;
 
+            case "config":
+                int Max = 10;
+                out.println(Max + ",5,23,100,10");
+                break;
+
+            case "cars":
+                StringBuilder carBuilder = new StringBuilder();
+                for (CarIF car : cars()) {
+                    if (carBuilder.length() > 1) carBuilder.append(",");
+                    carBuilder.append(car.id);
+                }
+                out.println(carBuilder.toString());
+                break;
 
             case "chart":
 
+                System.out.println("Hello");
+
                 JsonObject root = Json.createObjectBuilder()
-                        .add("data",Json.createArrayBuilder()
+
+                        .add("data", Json.createArrayBuilder()
                                 .add(Json.createObjectBuilder()
-                                        .add("x",Car.asNrArray(cars()))));
+                                        .add("x", Car.asNrArray(cars()))
+                                        .add("y", Car.asDurationArray(cars()))
+                                        .add("type", "bar")
+                                        .add("name", "Duration")
+                                )
+                                .add(Json.createObjectBuilder()
+                                        .add("x", Car.asNrArray(cars()))
+                                        .add("y", Car.asBeginArray(cars()))
+                                        .add("type", "bar")
+                                        .add("name", "Begin")
+                                )
+                                .add(Json.createObjectBuilder()
+                                        .add("x", Car.asNrArray(cars()))
+                                        .add("y", Car.asEndArray(cars()))
+                                        .add("type", "bar")
+                                        .add("name", "End")
+                                )
+                        ).build();
+
+                System.out.println("chart" + root.toString());
+                out.println(root.toString());
+                break;
 
 
             default:
@@ -156,11 +196,11 @@ public class DemoServlet extends HttpServlet {
         return stringBuilder.toString();
     }
 
-    private ArrayList<CarIF> cars(){
-        ArrayList<CarIF> zw= (ArrayList<CarIF>)getApplication().getAttribute("autos");
-        if(zw==null){
-            zw= new ArrayList<CarIF>();
-            getApplication().setAttribute("autos",zw);
+    private ArrayList<CarIF> cars() {
+        ArrayList<CarIF> zw = (ArrayList<CarIF>) getApplication().getAttribute("autos");
+        if (zw == null) {
+            zw = new ArrayList<CarIF>();
+            getApplication().setAttribute("autos", zw);
         }
         return zw;
     }
