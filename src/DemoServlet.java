@@ -98,23 +98,30 @@ public class DemoServlet extends HttpServlet {
 
             case "chart":
 
-                System.out.println("Hello");
 
                 //System.out.println(Car.asNrArray(cars()));
                 //System.out.println(Car.asDurationArray(cars()));
                 //System.out.println(Car.asBeginArray(cars()));
                 //System.out.println(Car.asEndArray(cars()));
 
+                String output= "{\n" + " \"data\": [\n";
+                ArrayList<Car> autos = cars();
+                String autoid = "{ \n \"x\": [ \n" ;
+                String parkdauer = " \n \"y\": [\n";
+                int counter = 0;
+                for(Car e: autos){
+                    if(counter+1 == autos.size()){
+                        autoid+= e.id +"\n";
+                        parkdauer += e.dauer +"\n";
+                        break;
+                    }
+                    autoid += e.id +",\n";
+                    parkdauer += e.dauer +",\n";
+                    counter ++;
+                }
 
-                JsonObjectBuilder root = Json.createObjectBuilder();
+                out.println(output + autoid +"],\n" + parkdauer + "],\n" + "\"type\": \"bar\"\n}\n]\n}" );
 
-                root.add("data", Json.createObjectBuilder()
-                            .add("x",1)
-                );
-
-                JsonObject js = root.build();
-
-                System.out.println("hello");
 
 /*
                         .add("data", Json.createArrayBuilder()
@@ -139,8 +146,6 @@ public class DemoServlet extends HttpServlet {
                         ).build();
 */
 
-                System.out.println("chart" + root.toString());
-                out.println(root.toString());
                 break;
 
 
