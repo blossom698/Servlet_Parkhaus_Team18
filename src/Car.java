@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Car implements CarIF {
+public class Car {
 
     int id;
     long ankunft;
@@ -17,12 +17,12 @@ public class Car implements CarIF {
 
     }
 
-    public static String asNrArray(ArrayList<CarIF> autos) {
+    public static String asNrArray(ArrayList<Car> autos) {
 
         int counter = 0;
         StringBuilder js = new StringBuilder("[\n");
 
-        for (CarIF e : autos) {
+        for (Car e : autos) {
 
             if (counter == autos.size() - 1) {
                 js.append(e.id + "\n]");
@@ -32,16 +32,19 @@ public class Car implements CarIF {
             counter++;
 
         }
+
+
+
         return js.toString();
 
     }
 
-    public static String asDurationArray(ArrayList<CarIF> autos) {
+    public static String asDurationArray(ArrayList<Car> autos) {
 
         int counter = 0;
         StringBuilder js = new StringBuilder("[\n");
 
-        for (CarIF e : autos) {
+        for (Car e : autos) {
 
             if (counter == autos.size() - 1) {
                 js.append(e.dauer + "\n]");
@@ -55,12 +58,12 @@ public class Car implements CarIF {
 
     }
 
-    public static String asBeginArray(ArrayList<CarIF> autos) {
+    public static String asBeginArray(ArrayList<Car> autos) {
 
         int counter = 0;
         StringBuilder js = new StringBuilder("[\n");
 
-        for (CarIF e : autos) {
+        for (Car e : autos) {
 
             if (counter == autos.size() - 1) {
                 js.append(e.ankunft + "\n]");
@@ -74,12 +77,12 @@ public class Car implements CarIF {
 
     }
 
-    public static String asEndArray(ArrayList<CarIF> autos) {
+    public static String asEndArray(ArrayList<Car> autos) {
 
         int counter = 0;
         StringBuilder js = new StringBuilder("[\n");
 
-        for (CarIF e : autos) {
+        for (Car e : autos) {
 
             if (counter == autos.size() - 1) {
                 js.append((e.ankunft+e.dauer) + "\n]");
