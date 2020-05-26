@@ -98,12 +98,6 @@ public class DemoServlet extends HttpServlet {
 
             case "chart":
 
-
-                //System.out.println(Car.asNrArray(cars()));
-                //System.out.println(Car.asDurationArray(cars()));
-                //System.out.println(Car.asBeginArray(cars()));
-                //System.out.println(Car.asEndArray(cars()));
-
                 String output= "{\n" + " \"data\": [\n";
                 ArrayList<Car> autos = cars();
                 String autoid = "{ \n \"x\": [ \n" ;
@@ -121,9 +115,9 @@ public class DemoServlet extends HttpServlet {
                 }
 
                 out.println(output + autoid +"],\n" + parkdauer + "],\n" + "\"type\": \"bar\"\n}\n]\n}" );
-
-
 /*
+                //Unser Versuch, die Vorgehensweise vom Video zu implementieren
+
                         .add("data", Json.createArrayBuilder()
                                 .add(Json.createObjectBuilder()
                                         .add("x", Car.asNrArray(cars()))
@@ -145,15 +139,11 @@ public class DemoServlet extends HttpServlet {
                                 )
                         ).build();
 */
-
                 break;
-
 
             default:
                 System.out.println("Invalid Command: " + request.getQueryString());
         }
-
-
     }
 
     private ServletContext getApplication() {

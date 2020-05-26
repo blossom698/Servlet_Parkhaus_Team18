@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 
 public class Car {
 
@@ -14,7 +13,6 @@ public class Car {
         this.ankunft = ankunft;
         this.dauer = dauer;
         this.platz = platz;
-
     }
 
     public static String asNrArray(ArrayList<Car> autos) {
@@ -23,20 +21,14 @@ public class Car {
         StringBuilder js = new StringBuilder("[\n");
 
         for (Car e : autos) {
-
             if (counter == autos.size() - 1) {
                 js.append(e.id + "\n]");
                 break;
             }
             js.append(e.id + ",\n");
             counter++;
-
         }
-
-
-
         return js.toString();
-
     }
 
     public static String asDurationArray(ArrayList<Car> autos) {
@@ -52,10 +44,8 @@ public class Car {
             }
             js.append(e.dauer + ",\n");
             counter++;
-
         }
         return js.toString();
-
     }
 
     public static String asBeginArray(ArrayList<Car> autos) {
@@ -64,17 +54,14 @@ public class Car {
         StringBuilder js = new StringBuilder("[\n");
 
         for (Car e : autos) {
-
             if (counter == autos.size() - 1) {
                 js.append(e.ankunft + "\n]");
                 break;
             }
             js.append(e.ankunft + ",\n");
             counter++;
-
         }
         return js.toString();
-
     }
 
     public static String asEndArray(ArrayList<Car> autos) {
@@ -85,15 +72,13 @@ public class Car {
         for (Car e : autos) {
 
             if (counter == autos.size() - 1) {
-                js.append((e.ankunft+e.dauer) + "\n]");
+                js.append((e.ankunft + e.dauer) + "\n]");
                 break;
             }
-            js.append((e.ankunft+e.dauer) + ",\n");
+            js.append((e.ankunft + e.dauer) + ",\n");
             counter++;
-
         }
         return js.toString();
-
     }
 
 }
