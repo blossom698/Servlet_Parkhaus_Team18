@@ -19,15 +19,15 @@ public class Car {
 
     public static JsonArrayBuilder asNrArray(ArrayList<Car> autos) {
         JsonArrayBuilder j = Json.createArrayBuilder();
-        for (Car e: autos) {
-            j.add("Car"+e.id);
+        for (Car e : autos) {
+            j.add("Car" + e.id);
         }
         return j;
     }
 
     public static JsonArrayBuilder asDurationArray(ArrayList<Car> autos) {
         JsonArrayBuilder j = Json.createArrayBuilder();
-        for (Car e: autos) {
+        for (Car e : autos) {
             j.add(e.dauer);
         }
         return j;
@@ -35,7 +35,7 @@ public class Car {
 
     public static JsonArrayBuilder asBeginArray(ArrayList<Car> autos) {
         JsonArrayBuilder j = Json.createArrayBuilder();
-        for (Car e: autos) {
+        for (Car e : autos) {
             j.add(e.ankunft);
         }
         return j;
@@ -43,8 +43,8 @@ public class Car {
 
     public static JsonArrayBuilder asEndArray(ArrayList<Car> autos) {
         JsonArrayBuilder j = Json.createArrayBuilder();
-        for (Car e: autos) {
-            j.add(e.dauer);
+        for (Car e : autos) {
+            j.add(e.ankunft + e.dauer);
         }
         return j;
     }
