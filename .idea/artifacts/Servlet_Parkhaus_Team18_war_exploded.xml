@@ -7,6 +7,10 @@
         <element id="directory" name="classes">
           <element id="module-output" name="Servlet_Parkhaus_Team18" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="org.glassfish:javax.json:1.1.4" />
+          <element id="library" level="project" name="javax.json.bind:javax.json.bind-api:1.0" />
+        </element>
       </element>
     </root>
   </artifact>

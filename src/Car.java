@@ -1,3 +1,5 @@
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import java.util.ArrayList;
 
 public class Car {
@@ -15,70 +17,36 @@ public class Car {
         this.platz = platz;
     }
 
-    public static String asNrArray(ArrayList<Car> autos) {
-
-        int counter = 0;
-        StringBuilder js = new StringBuilder("[\n");
-
-        for (Car e : autos) {
-            if (counter == autos.size() - 1) {
-                js.append(e.id + "\n]");
-                break;
-            }
-            js.append(e.id + ",\n");
-            counter++;
+    public static JsonArrayBuilder asNrArray(ArrayList<Car> autos) {
+        JsonArrayBuilder j = Json.createArrayBuilder();
+        for (Car e: autos) {
+            j.add("Car"+e.id);
         }
-        return js.toString();
+        return j;
     }
 
-    public static String asDurationArray(ArrayList<Car> autos) {
-
-        int counter = 0;
-        StringBuilder js = new StringBuilder("[\n");
-
-        for (Car e : autos) {
-
-            if (counter == autos.size() - 1) {
-                js.append(e.dauer + "\n]");
-                break;
-            }
-            js.append(e.dauer + ",\n");
-            counter++;
+    public static JsonArrayBuilder asDurationArray(ArrayList<Car> autos) {
+        JsonArrayBuilder j = Json.createArrayBuilder();
+        for (Car e: autos) {
+            j.add(e.dauer);
         }
-        return js.toString();
+        return j;
     }
 
-    public static String asBeginArray(ArrayList<Car> autos) {
-
-        int counter = 0;
-        StringBuilder js = new StringBuilder("[\n");
-
-        for (Car e : autos) {
-            if (counter == autos.size() - 1) {
-                js.append(e.ankunft + "\n]");
-                break;
-            }
-            js.append(e.ankunft + ",\n");
-            counter++;
+    public static JsonArrayBuilder asBeginArray(ArrayList<Car> autos) {
+        JsonArrayBuilder j = Json.createArrayBuilder();
+        for (Car e: autos) {
+            j.add(e.ankunft);
         }
-        return js.toString();
+        return j;
     }
 
-    public static String asEndArray(ArrayList<Car> autos) {
-
-        int counter = 0;
-        StringBuilder js = new StringBuilder("[\n");
-
-        for (Car e : autos) {
-
-            if (counter == autos.size() - 1) {
-                js.append((e.ankunft + e.dauer) + "\n]");
-                break;
-            }
-            js.append((e.ankunft + e.dauer) + ",\n");
-            counter++;
+    public static JsonArrayBuilder asEndArray(ArrayList<Car> autos) {
+        JsonArrayBuilder j = Json.createArrayBuilder();
+        for (Car e: autos) {
+            j.add(e.dauer);
         }
-        return js.toString();
+        return j;
     }
 
 }

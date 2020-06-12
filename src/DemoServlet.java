@@ -97,7 +97,7 @@ public class DemoServlet extends HttpServlet {
                 break;
 
             case "chart":
-
+                /*
                 String output= "{\n" + " \"data\": [\n";
                 ArrayList<Car> autos = cars();
                 String autoid = "{ \n \"x\": [ \n" ;
@@ -115,9 +115,10 @@ public class DemoServlet extends HttpServlet {
                 }
 
                 out.println(output + autoid +"],\n" + parkdauer + "],\n" + "\"type\": \"bar\"\n}\n]\n}" );
-/*
+                */
                 //Unser Versuch, die Vorgehensweise vom Video zu implementieren
-
+                System.out.println("in chart");
+                JsonObject root = Json.createObjectBuilder()
                         .add("data", Json.createArrayBuilder()
                                 .add(Json.createObjectBuilder()
                                         .add("x", Car.asNrArray(cars()))
@@ -138,7 +139,8 @@ public class DemoServlet extends HttpServlet {
                                         .add("name", "End")
                                 )
                         ).build();
-*/
+                out.println(root.toString());
+                System.out.println(root.toString());
                 break;
 
             default:
