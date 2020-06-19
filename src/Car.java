@@ -6,16 +6,23 @@ public class Car {
 
     int id;
     long ankunft;
-    long dauer;
+    long dauer=0;
     int platz;
+    double betrag=0;
 
-    public Car(int id, long ankunft, long dauer, int platz) {
+    public Car(int id, long ankunft, int platz) {
 
         this.id = id;
         this.ankunft = ankunft;
-        this.dauer = dauer;
         this.platz = platz;
     }
+
+    public void setDauer_Betrag(double betrag, long dauer) {
+        this.betrag=betrag;
+        this.dauer=dauer;
+    }
+
+
 
     public static JsonArrayBuilder asNrArray(ArrayList<Car> autos) {
         JsonArrayBuilder j = Json.createArrayBuilder();

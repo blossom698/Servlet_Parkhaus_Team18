@@ -1,3 +1,4 @@
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -5,17 +6,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.ArrayList;
 import javax.json.*;
 
 @WebServlet("/DemoServlet")
 public class DemoServlet extends HttpServlet {
 
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        Parkhaus parkhaus = new Parkhaus(10);
+        getApplication().setAttribute("parkhaus", parkhaus);
+
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Float counter = (Float) getApplication().getAttribute("counter");
-        if (counter == null) counter = 0.0f;
-        Float sum = getPersistentSum();
         String body = getBody(request);
 
         System.out.println(body);
@@ -23,37 +27,25 @@ public class DemoServlet extends HttpServlet {
         String[] params = body.split(",");
         String event = params[0];
 
-        if (event.equals("leave")) {
-            String priceString = params[4];
-            String timeString = params[3];
-            int id = Integer.parseInt(params[1]);
-            long ankunft = Long.parseLong(params[2]);
-            long dauer = Long.parseLong(params[3]);
-            int platz = Integer.parseInt(params[7]);
+        Parkhaus p = (Parkhaus) getApplication().getAttribute("parkhaus");
 
-            ArrayList<Car> autos = (ArrayList<Car>) getApplication().getAttribute("autos");
-            if (autos == null) {
-                getApplication().setAttribute("autos", new ArrayList<Car>());
-                autos = (ArrayList<Car>) getApplication().getAttribute("autos");
-            }
+        switch (event) {
+            case "change_Max":
+                p.changeSize(Integer.parseInt(params[2]));
+                break;
 
-            Car auto = new Car(id, ankunft, dauer, platz);
+            case "enter":
+                p.einparken(new Car(Integer.parseInt(params[1]), Long.parseLong(params[2]),  Integer.parseInt(params[7])));
+                break;
 
-            autos.add(auto);
-
-            counter++;
-            getApplication().setAttribute("counter", counter);
-
-            Float timeAvg = getPersistentAvgTime(Float.parseFloat(timeString));
-
-            float price = Integer.parseInt(priceString) / 100.0f;
-            sum += price;
-            // store sum persistently in ServletContext
-            getApplication().setAttribute("sum", sum);
-
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-            out.println(sum);
+            case "leave":
+                p.verlassen(Integer.parseInt(params[7]), Double.parseDouble(params[4])/100.0, Long.parseLong(params[3]));
+/*
+                response.setContentType("text/html");
+                PrintWriter out = response.getWriter();
+                out.println(sum);
+ */
+                break;
         }
     }
 
@@ -63,20 +55,21 @@ public class DemoServlet extends HttpServlet {
         String param = requestParamString[1];
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
+        Parkhaus parkhaus = (Parkhaus) getApplication().getAttribute("parkhaus");
 
         switch (request.getParameter("cmd")) {
             case "Summe":
-                Float sum = getPersistentSum();
+                Double sum = parkhaus.toStream().mapToDouble(x->x.betrag).sum();
                 out.println(sum);
                 System.out.println("sum = " + sum);
                 break;
             case "avg":
-                Float avg = getPersistentAvg();
+                Double avg = parkhaus.toStream().mapToDouble(x->x.betrag).average().orElse(0.0);
                 out.println(avg);
                 System.out.println("avg = " + avg);
                 break;
             case "avg_time":
-                Float avg_time = getPersistentAvgTime(null);
+                Double avg_time = parkhaus.toStream().mapToDouble(x->x.dauer).average().orElse(0.0);
                 out.println(avg_time);
                 System.out.println("avg_time = " + avg_time);
                 break;
@@ -87,53 +80,29 @@ public class DemoServlet extends HttpServlet {
                 break;
 
             case "cars":
-                StringBuilder carBuilder = new StringBuilder();
-                for (Car car : cars()) {
-                    if (carBuilder.length() > 1) carBuilder.append(",");
-                    carBuilder.append(car.id);
-                }
-                out.println(carBuilder.toString());
+
+                out.println(parkhaus.asIDString());
                 break;
 
             case "chart":
-                /*
-                String output= "{\n" + " \"data\": [\n";
-                ArrayList<Car> autos = cars();
-                String autoid = "{ \n \"x\": [ \n" ;
-                String parkdauer = " \n \"y\": [\n";
-                int counter = 0;
-                for(Car e: autos){
-                    if(counter+1 == autos.size()){
-                        autoid+= e.id +"\n";
-                        parkdauer += e.dauer +"\n";
-                        break;
-                    }
-                    autoid += e.id +",\n";
-                    parkdauer += e.dauer +",\n";
-                    counter ++;
-                }
 
-                out.println(output + autoid +"],\n" + parkdauer + "],\n" + "\"type\": \"bar\"\n}\n]\n}" );
-                */
-                //Unser Versuch, die Vorgehensweise vom Video zu implementieren
-                System.out.println("in chart");
                 JsonObject root = Json.createObjectBuilder()
                         .add("data", Json.createArrayBuilder()
                                 .add(Json.createObjectBuilder()
-                                        .add("x", Car.asNrArray(cars()))
-                                        .add("y", Car.asDurationArray(cars()))
+                                        .add("x", parkhaus.asNrArray())
+                                        .add("y", parkhaus.asDurationArray())
                                         .add("type", "bar")
                                         .add("name", "Duration")
                                 )
                                 .add(Json.createObjectBuilder()
-                                        .add("x", Car.asNrArray(cars()))
-                                        .add("y", Car.asBeginArray(cars()))
+                                        .add("x", parkhaus.asNrArray())
+                                        .add("y", parkhaus.asBeginArray())
                                         .add("type", "bar")
                                         .add("name", "Begin")
                                 )
                                 .add(Json.createObjectBuilder()
-                                        .add("x", Car.asNrArray(cars()))
-                                        .add("y", Car.asEndArray(cars()))
+                                        .add("x", parkhaus.asNrArray())
+                                        .add("y", parkhaus.asEndArray())
                                         .add("type", "bar")
                                         .add("name", "End")
                                 )
@@ -149,37 +118,6 @@ public class DemoServlet extends HttpServlet {
 
     private ServletContext getApplication() {
         return getServletConfig().getServletContext();
-    }
-
-    private Float getPersistentSum() {
-        Float sum;
-        ServletContext application = getApplication();
-        sum = (Float) application.getAttribute("sum");
-        if (sum == null) sum = 0.0f;
-        return sum;
-    }
-
-    private Float getPersistentAvg() {
-        Float counter, sum;
-        ServletContext application = getApplication();
-        counter = (Float) application.getAttribute("counter");
-        sum = (Float) application.getAttribute("sum");
-        if (counter == null) return 0.0f;
-        return sum / counter;
-    }
-
-    private Float getPersistentAvgTime(Float addTime) {
-        ServletContext application = getApplication();
-        Float timeSum = (Float) application.getAttribute("timeSum");
-        Float counter = (Float) application.getAttribute("counter");
-        if (timeSum == null) timeSum = 0.0f;
-        if (counter == null) return 0.0f;
-
-        if (addTime != null) {
-            application.setAttribute("timeSum", timeSum + addTime);
-        }
-
-        return (Float) application.getAttribute("timeSum") / counter;
     }
 
 
@@ -208,14 +146,4 @@ public class DemoServlet extends HttpServlet {
         }
         return stringBuilder.toString();
     }
-
-    private ArrayList<Car> cars() {
-        ArrayList<Car> zw = (ArrayList<Car>) getApplication().getAttribute("autos");
-        if (zw == null) {
-            zw = new ArrayList<Car>();
-            getApplication().setAttribute("autos", zw);
-        }
-        return zw;
-    }
-
 }
