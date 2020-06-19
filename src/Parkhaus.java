@@ -1,21 +1,23 @@
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class Parkhaus {
+public class Parkhaus implements IModel{
 
     private Car[] autos;
     private List<Car> eintraege;
     private int freiePlaetze;
+    private List <IView> views;
 
 
     public Parkhaus(int groesse) {
         this.freiePlaetze = groesse;
         autos = new Car[groesse];
         eintraege = new ArrayList<Car>();
+        views = new ArrayList<IView>();
     }
 
     public void einparken(Car auto) {
@@ -33,7 +35,7 @@ public class Parkhaus {
 
     public JsonArrayBuilder asNrArray(){
         JsonArrayBuilder j = Json.createArrayBuilder();
-        for (Car e : autos) {
+        for (Car e : eintraege) {
             j.add("Car" + e.id);
         }
         return j;
@@ -41,7 +43,7 @@ public class Parkhaus {
 
     public JsonArrayBuilder asDurationArray() {
         JsonArrayBuilder j = Json.createArrayBuilder();
-        for (Car e : autos) {
+        for (Car e : eintraege) {
             j.add(e.dauer);
         }
         return j;
@@ -49,7 +51,7 @@ public class Parkhaus {
 
     public JsonArrayBuilder asBeginArray() {
         JsonArrayBuilder j = Json.createArrayBuilder();
-        for (Car e : autos) {
+        for (Car e : eintraege) {
             j.add(e.ankunft);
         }
         return j;
@@ -57,7 +59,7 @@ public class Parkhaus {
 
     public JsonArrayBuilder asEndArray() {
         JsonArrayBuilder j = Json.createArrayBuilder();
-        for (Car e : autos) {
+        for (Car e : eintraege) {
             j.add(e.ankunft + e.dauer);
         }
         return j;
@@ -88,5 +90,56 @@ public class Parkhaus {
             carBuilder.append(car.id);
         }
         return carBuilder.toString();
+    }
+
+    @Override
+    public void anmelden(IView view) {
+        views.add(view);
+    }
+
+    @Override
+    public void abmelden(IView view) {
+        if(views.contains(view)) {
+            views.remove(view);
+        }
+    }
+
+    @Override
+    public void benachichtigeviews() {
+        for(IView v: views) {
+            v.aktualisieren();
+        }
+    }
+
+    @Override
+    public double gibTagesseinnahmen() {
+        Date d = new Date();
+        double Tageseinnahmen = eintraege.stream()
+                .filter(x -> ((x.ankunft + x.dauer)) / 100*24 == (d.getTime()) / 100*24)
+                .mapToDouble(x -> x.betrag)
+                .sum();
+        return Tageseinnahmen;
+    }
+
+    @Override
+    public double gibWocheneinnahmen() {
+        Date datum = new Date();
+        double Wocheneinnahmen = eintraege.stream()
+                .filter(x -> ((x.ankunft + x.dauer)) / (100*24*7) == (datum.getTime()) / (100*24*7))
+                .mapToDouble(x -> x.betrag)
+                .sum();
+        return Wocheneinnahmen;
+    }
+
+    @Override
+    public double gibBetrag(int index) {
+        Car a = autos[index];
+        double f =  new Date().getTime()-a.ankunft * 0.01;
+        return f;
+    }
+
+    @Override
+    public int gibfreieplaetze() {
+        return freiePlaetze;
     }
 }
