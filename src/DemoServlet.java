@@ -39,7 +39,7 @@ public class DemoServlet extends HttpServlet {
                 break;
 
             case "leave":
-                p.verlassen(Integer.parseInt(params[7]), Double.parseDouble(params[4])/100.0, Long.parseLong(params[3]));
+                p.verlassen(Integer.parseInt(params[1]), Double.parseDouble(params[4])/100.0, Long.parseLong(params[3]));
 /*
                 response.setContentType("text/html");
                 PrintWriter out = response.getWriter();

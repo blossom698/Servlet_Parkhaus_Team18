@@ -21,14 +21,28 @@ public class Parkhaus implements IModel{
     }
 
     public void einparken(Car auto) {
-        autos[auto.platz] = auto;
+        for (int i = 0; i < autos.length; i++) {
+            if (autos[i] == null) {
+                autos[i] = auto;
+                break;
+            }
+        }
         freiePlaetze--;
     }
 
-    public void verlassen(int platz, double betrag, long dauer) {
-        autos[platz].setDauer_Betrag(betrag,dauer);
-        eintraege.add(autos[platz]);
-        autos[platz] = null;
+    public void verlassen(int id, double betrag, long dauer) {
+        for (int i = 0; i < autos.length; i++) {
+            if (autos[i] == null && i != autos.length-1) {
+                continue;
+            } else if (i == autos.length-1) {
+                System.out.println("------ ID nicht gefunden, sehet her. ------");
+            } else if(autos[i].id == id) {
+                autos[i].setDauer_Betrag(betrag, dauer);
+                eintraege.add(autos[i]);
+                autos[i] = null;
+                break;
+            }
+        }
         freiePlaetze++;
 
     }
@@ -113,29 +127,23 @@ public class Parkhaus implements IModel{
 
     @Override
     public double gibTagesseinnahmen() {
-        Date d = new Date();
-        double Tageseinnahmen = eintraege.stream()
-                .filter(x -> ((x.ankunft + x.dauer)) / 100*24 == (d.getTime()) / 100*24)
+        return eintraege.stream()
+                .filter(x -> ((x.ankunft + x.dauer)) / (100*24) == (new Date().getTime()) / (100*24))
                 .mapToDouble(x -> x.betrag)
                 .sum();
-        return Tageseinnahmen;
     }
 
     @Override
     public double gibWocheneinnahmen() {
-        Date datum = new Date();
-        double Wocheneinnahmen = eintraege.stream()
-                .filter(x -> ((x.ankunft + x.dauer)) / (100*24*7) == (datum.getTime()) / (100*24*7))
+        return eintraege.stream()
+                .filter(x -> ((x.ankunft + x.dauer)) / (100*24*7) == (new Date().getTime()) / (100*24*7))
                 .mapToDouble(x -> x.betrag)
                 .sum();
-        return Wocheneinnahmen;
     }
 
     @Override
-    public double gibBetrag(int index) {
-        Car a = autos[index];
-        double f =  new Date().getTime()-a.ankunft * 0.01;
-        return f;
+    public double gibBetrag(int index) { ;
+        return (new Date().getTime()-autos[index].ankunft) * 0.01;
     }
 
     @Override

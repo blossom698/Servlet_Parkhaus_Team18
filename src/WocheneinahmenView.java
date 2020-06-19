@@ -1,4 +1,4 @@
-public class Wocheneinahmen implements IView {
+public class WocheneinahmenView implements IView {
 
     Parkhaus parkh;
     double einahmenw;

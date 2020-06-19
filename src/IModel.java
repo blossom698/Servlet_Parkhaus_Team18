@@ -6,11 +6,9 @@ public interface IModel  {
 
     public void benachichtigeviews();
 
-
     public double gibTagesseinnahmen();
     public double gibWocheneinnahmen();
     public double gibBetrag(int index);
     public int gibfreieplaetze();
-
 
 }

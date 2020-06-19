@@ -1,4 +1,4 @@
-public class Betrag implements IView {
+public class BetragView implements IView {
 
     Parkhaus phaus;
     double betrag;
