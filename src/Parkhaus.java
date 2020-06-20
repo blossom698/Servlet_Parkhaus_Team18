@@ -5,12 +5,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class Parkhaus implements IModel{
+public class Parkhaus implements IModel {
 
     private Car[] autos;
     private List<Car> eintraege;
     private int freiePlaetze;
-    private List <IView> views;
+    private List<IView> views;
 
 
     public Parkhaus(int groesse) {
@@ -32,22 +32,22 @@ public class Parkhaus implements IModel{
 
     public void verlassen(int id, double betrag, long dauer) {
         for (int i = 0; i < autos.length; i++) {
-            if (autos[i] == null && i != autos.length-1) {
+            if (autos[i] == null && i != autos.length - 1) {
                 continue;
-            } else if (i == autos.length-1) {
-                System.out.println("------ ID nicht gefunden, sehet her. ------");
-            } else if(autos[i].id == id) {
+            } else if (autos[i] != null && autos[i].id == id) {
                 autos[i].setDauer_Betrag(betrag, dauer);
                 eintraege.add(autos[i]);
                 autos[i] = null;
+                freiePlaetze++;
                 break;
+            } else if (i == autos.length - 1) {
+                System.out.println("------ ID nicht gefunden, sehet her. ------");
             }
         }
-        freiePlaetze++;
 
     }
 
-    public JsonArrayBuilder asNrArray(){
+    public JsonArrayBuilder asNrArray() {
         JsonArrayBuilder j = Json.createArrayBuilder();
         for (Car e : eintraege) {
             j.add("Car" + e.id);
@@ -79,6 +79,17 @@ public class Parkhaus implements IModel{
         return j;
     }
 
+    public JsonArrayBuilder asCategories() {
+        JsonArrayBuilder j = Json.createArrayBuilder();
+
+        j.add(eintraege.stream().filter(x -> x.kategorie.equals("any")).count());
+        j.add(eintraege.stream().filter(x -> x.kategorie.equals("Familie")).count());
+        j.add(eintraege.stream().filter(x -> x.kategorie.equals("Frauen")).count());
+        j.add(eintraege.stream().filter(x -> x.kategorie.equals("Eingeschraenkte")).count());
+
+        return j;
+    }
+
 
     public Stream<Car> toStream() {
         return eintraege.stream();
@@ -97,9 +108,9 @@ public class Parkhaus implements IModel{
 
     }
 
-    public String asIDString(){
+    public String asIDString() {
         StringBuilder carBuilder = new StringBuilder();
-        for (Car car: eintraege) {
+        for (Car car : eintraege) {
             if (carBuilder.length() > 1) carBuilder.append(",");
             carBuilder.append(car.id);
         }
@@ -113,37 +124,43 @@ public class Parkhaus implements IModel{
 
     @Override
     public void abmelden(IView view) {
-        if(views.contains(view)) {
+        if (views.contains(view)) {
             views.remove(view);
         }
     }
 
     @Override
     public void benachichtigeviews() {
-        for(IView v: views) {
+        for (IView v : views) {
             v.aktualisieren();
         }
     }
 
     @Override
     public double gibTagesseinnahmen() {
-        return eintraege.stream()
-                .filter(x -> ((x.ankunft + x.dauer)) / (100*24) == (new Date().getTime()) / (100*24))
-                .mapToDouble(x -> x.betrag)
-                .sum();
+        return new Tageseinnahmen().einnahmenBerechnen(this.toStream());
     }
 
     @Override
     public double gibWocheneinnahmen() {
-        return eintraege.stream()
-                .filter(x -> ((x.ankunft + x.dauer)) / (100*24*7) == (new Date().getTime()) / (100*24*7))
-                .mapToDouble(x -> x.betrag)
-                .sum();
+        return new Wocheneinnahmen().einnahmenBerechnen(this.toStream());
     }
 
     @Override
-    public double gibBetrag(int index) { ;
-        return (new Date().getTime()-autos[index].ankunft) * 0.01;
+    public double gibBetrag(int id) {
+
+        for (int i = 0; i < autos.length; i++) {
+            if (autos[i] == null && i != autos.length - 1) {
+                continue;
+            } else if (autos[i] != null && autos[i].id == id) {
+                return (new Date().getTime() - autos[i].ankunft) * 0.01;
+
+            } else if (i == autos.length - 1) {
+                System.out.println("------ ID nicht gefunden, sehet her. ------");
+            }
+        }
+
+        return -1;
     }
 
     @Override

@@ -35,7 +35,7 @@ public class DemoServlet extends HttpServlet {
                 break;
 
             case "enter":
-                p.einparken(new Car(Integer.parseInt(params[1]), Long.parseLong(params[2]),  Integer.parseInt(params[7])));
+                p.einparken(new Car(Integer.parseInt(params[1]), Long.parseLong(params[2]),  Integer.parseInt(params[7]),params[8]));
                 break;
 
             case "leave":
@@ -63,17 +63,26 @@ public class DemoServlet extends HttpServlet {
                 out.println(sum);
                 System.out.println("sum = " + sum);
                 break;
-            case "avg":
-                Double avg = parkhaus.toStream().mapToDouble(x->x.betrag).average().orElse(0.0);
+            case "Durchschnittlicher Betrag":
+                Double avg = ((int)(parkhaus.toStream().mapToDouble(x->x.betrag).average().orElse(0.0)*100))/100.0;
                 out.println(avg);
-                System.out.println("avg = " + avg);
+                System.out.println("Durchschnittlicher Betrag = " + avg);
                 break;
-            case "avg_time":
-                Double avg_time = parkhaus.toStream().mapToDouble(x->x.dauer).average().orElse(0.0);
+            case "Durchschnittliche Parkzeit":
+                Double avg_time = ((int)(parkhaus.toStream().mapToDouble(x->x.dauer).average().orElse(0.0)*100))/100.0;
                 out.println(avg_time);
-                System.out.println("avg_time = " + avg_time);
+                System.out.println("Durchschnittliche Parkzeit = " + avg_time);
                 break;
-
+            case "Tageseinnahmen":
+                Double tageseinnahmen = new Tageseinnahmen().einnahmenBerechnen(parkhaus.toStream());
+                out.println(tageseinnahmen);
+                System.out.println("Tageseinnahmen = " + tageseinnahmen);
+                break;
+            case "Wocheneinnahmen":
+                Double wocheneinnahmen = new Wocheneinnahmen().einnahmenBerechnen(parkhaus.toStream());
+                out.println(wocheneinnahmen);
+                System.out.println("Wocheneinnahmen = " + wocheneinnahmen);
+                break;
             case "config":
                 int Max = 10;
                 out.println(Max + ",5,23,100,10");
@@ -84,7 +93,7 @@ public class DemoServlet extends HttpServlet {
                 out.println(parkhaus.asIDString());
                 break;
 
-            case "chart":
+            case "Parkdauerdiagramm":
 
                 JsonObject root = Json.createObjectBuilder()
                         .add("data", Json.createArrayBuilder()
@@ -94,22 +103,27 @@ public class DemoServlet extends HttpServlet {
                                         .add("type", "bar")
                                         .add("name", "Duration")
                                 )
-                                .add(Json.createObjectBuilder()
-                                        .add("x", parkhaus.asNrArray())
-                                        .add("y", parkhaus.asBeginArray())
-                                        .add("type", "bar")
-                                        .add("name", "Begin")
-                                )
-                                .add(Json.createObjectBuilder()
-                                        .add("x", parkhaus.asNrArray())
-                                        .add("y", parkhaus.asEndArray())
-                                        .add("type", "bar")
-                                        .add("name", "End")
-                                )
+
                         ).build();
                 out.println(root.toString());
                 System.out.println(root.toString());
                 break;
+
+            case "Parkplatzbesetzungsdiagramm":
+                JsonObject root2 = Json.createObjectBuilder()
+                        .add("data", Json.createArrayBuilder()
+                                .add(Json.createObjectBuilder()
+                                        .add("values", parkhaus.asCategories())
+                                        .add("labels", Json.createArrayBuilder().add("any").add("Familie").add("Frauen").add("Eingeschraenkte"))
+                                        .add("type", "pie")
+                                        .add("name", "Duration")
+                                )
+
+                        ).build();
+                out.println(root2.toString());
+                System.out.println(root2.toString());
+                break;
+
 
             default:
                 System.out.println("Invalid Command: " + request.getQueryString());

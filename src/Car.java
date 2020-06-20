@@ -9,12 +9,14 @@ public class Car {
     long dauer=0;
     int platz;
     double betrag=0;
+    String kategorie;
 
-    public Car(int id, long ankunft, int platz) {
+    public Car(int id, long ankunft, int platz, String kat) {
 
         this.id = id;
         this.ankunft = ankunft;
         this.platz = platz;
+        kategorie=kat;
     }
 
     public void setDauer_Betrag(double betrag, long dauer) {

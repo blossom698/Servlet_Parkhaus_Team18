@@ -13,9 +13,9 @@ class CarTest {
     @BeforeEach
     public void setUp() {
 
-        Car a1 = new Car(1, 6000L,  1);
-        Car a2 = new Car(2, 7000L,  2);
-        Car a3 = new Car(3, 8000L,  4);
+        Car a1 = new Car(1, 6000L,  1,"Frau");
+        Car a2 = new Car(2, 7000L,  2, "Behinderung");
+        Car a3 = new Car(3, 8000L,  4, "Familie");
 
         autos.add(a1);
         autos.add(a2);

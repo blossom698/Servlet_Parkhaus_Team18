@@ -18,9 +18,9 @@
   <ccm-parkhaus-9-0-0
           server_url="${pageContext.request.contextPath}/DemoServlet"
           license_max="30"
-          client_categories='["any","Familie","Frauen"]'
-          extra_buttons='["Summe","avg","avg_time"]'
-          extra_charts='["chart"]'>
+          client_categories='["any","any","any","any","any","any","any","any","any","Familie","Frauen","Eingeschraenkte"]'
+          extra_buttons='["Summe","Durchschnittlicher Betrag","Durchschnittliche Parkzeit","Tageseinnahmen","Wocheneinnahmen"]'
+          extra_charts='["Parkdauerdiagramm","Parkplatzbesetzungsdiagramm"]'>
 
   </ccm-parkhaus-9-0-0>
   </body>
