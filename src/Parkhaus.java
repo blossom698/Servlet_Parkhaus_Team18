@@ -7,10 +7,10 @@ import java.util.stream.Stream;
 
 public class Parkhaus implements IModel {
 
-    private Car[] autos;
-    private List<Car> eintraege;
+    private Car[] autos; //aktuell parkende Autos
+    private List<Car> eintraege; //Datenbank der Autos die jemals da waren (und nicht parkend)
     private int freiePlaetze;
-    private List<IView> views;
+    private List<IView> views; //TODO: Herausfinden, was das war.
 
 
     public Parkhaus(int groesse) {
@@ -20,19 +20,25 @@ public class Parkhaus implements IModel {
         views = new ArrayList<IView>();
     }
 
+    /*
+     * Parkt das Auto an die erste freie Stelle im autos Array
+     */
     public void einparken(Car auto) {
         for (int i = 0; i < autos.length; i++) {
             if (autos[i] == null) {
                 autos[i] = auto;
+                freiePlaetze--; //Anzahl freie Plätze dekrementieren
                 break;
             }
         }
-        freiePlaetze--;
     }
 
+    /*
+     * Entfernt das Auto aus dem Array, wenn vorhanden. Wenn nicht vorhanden, dann wird in dei Konsole eine Fehlermeldung ausgegeben.
+     */
     public void verlassen(int id, double betrag, long dauer) {
         for (int i = 0; i < autos.length; i++) {
-            if (autos[i] == null && i != autos.length - 1) {
+            if (autos[i] == null && i != autos.length - 1) { //TODO: Ausprobieren, ob das notwendig ist.
                 continue;
             } else if (autos[i] != null && autos[i].id == id) {
                 autos[i].setDauer_Betrag(betrag, dauer);
@@ -55,7 +61,7 @@ public class Parkhaus implements IModel {
         return j;
     }
 
-    public JsonArrayBuilder asDurationArray() {
+    public JsonArrayBuilder asDurationArray() { //TODO: Anschauen, wo die Statische Version verwendet wird.
         JsonArrayBuilder j = Json.createArrayBuilder();
         for (Car e : eintraege) {
             j.add(e.dauer);
@@ -82,7 +88,7 @@ public class Parkhaus implements IModel {
     public JsonArrayBuilder asCategories() {
         JsonArrayBuilder j = Json.createArrayBuilder();
 
-        j.add(eintraege.stream().filter(x -> x.kategorie.equals("any")).count());
+        j.add(eintraege.stream().filter(x -> x.kategorie.equals("beliebig")).count());
         j.add(eintraege.stream().filter(x -> x.kategorie.equals("Familie")).count());
         j.add(eintraege.stream().filter(x -> x.kategorie.equals("Frauen")).count());
         j.add(eintraege.stream().filter(x -> x.kategorie.equals("Eingeschraenkte")).count());
@@ -90,13 +96,21 @@ public class Parkhaus implements IModel {
         return j;
     }
 
-
+    /*
+     * Streamt die Einträge-Liste
+     */
     public Stream<Car> toStream() {
         return eintraege.stream();
     }
 
-    public void changeSize(int size) {
 
+    /*
+     * Verändert die Größe des Arrays, wenn wir das Array größer machen wollen. Wenn es kleiner gemacht
+     * werden soll, dann wird nichts geändert (da der Zugriffsbereich in der Applikation nur verkleinert
+     * wird).
+     */
+    public void changeSize(int size) {
+        //TODO: Freie Plätze anpassen.
         if (size > autos.length) {
 
             Car[] autos_new = new Car[size];
@@ -108,6 +122,9 @@ public class Parkhaus implements IModel {
 
     }
 
+    /*
+     * Erschafft einen String aller IDs in dem Parkhaus
+     */
     public String asIDString() {
         StringBuilder carBuilder = new StringBuilder();
         for (Car car : eintraege) {
@@ -147,6 +164,7 @@ public class Parkhaus implements IModel {
     }
 
     @Override
+    //TODO: Passt ja nicht wirklich. Warum müssen wir das seperat noch machen, wenn das Script das schon kann?
     public double gibBetrag(int id) {
 
         for (int i = 0; i < autos.length; i++) {

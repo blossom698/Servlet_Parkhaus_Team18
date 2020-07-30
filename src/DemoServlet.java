@@ -13,6 +13,8 @@ public class DemoServlet extends HttpServlet {
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+
+        // Initialisieren des Parkhauses
         Parkhaus parkhaus = new Parkhaus(10);
         getApplication().setAttribute("parkhaus", parkhaus);
 
@@ -29,6 +31,7 @@ public class DemoServlet extends HttpServlet {
 
         Parkhaus p = (Parkhaus) getApplication().getAttribute("parkhaus");
 
+        //Abhängig vom Kommando wird verschiedenes durchgeführt.
         switch (event) {
             case "change_Max":
                 p.changeSize(Integer.parseInt(params[2]));
@@ -40,12 +43,8 @@ public class DemoServlet extends HttpServlet {
 
             case "leave":
                 p.verlassen(Integer.parseInt(params[1]), Double.parseDouble(params[4])/100.0, Long.parseLong(params[3]));
-/*
-                response.setContentType("text/html");
-                PrintWriter out = response.getWriter();
-                out.println(sum);
- */
                 break;
+
         }
     }
 
@@ -63,38 +62,42 @@ public class DemoServlet extends HttpServlet {
                 out.println(sum);
                 System.out.println("sum = " + sum);
                 break;
+
             case "Durchschnittlicher Betrag":
+                //Runden auf zwei Nachkommastellen, wegen Euro bzw. Centanzahl (Erst auf Cent bringen, dann den Rest abschneiden, dann auf Euro wieder wechseln).
                 Double avg = ((int)(parkhaus.toStream().mapToDouble(x->x.betrag).average().orElse(0.0)*100))/100.0;
                 out.println(avg);
                 System.out.println("Durchschnittlicher Betrag = " + avg);
                 break;
+
             case "Durchschnittliche Parkzeit":
                 Double avg_time = ((int)(parkhaus.toStream().mapToDouble(x->x.dauer).average().orElse(0.0)*100))/100.0;
                 out.println(avg_time);
                 System.out.println("Durchschnittliche Parkzeit = " + avg_time);
                 break;
+
             case "Tageseinnahmen":
                 Double tageseinnahmen = new Tageseinnahmen().einnahmenBerechnen(parkhaus.toStream());
                 out.println(tageseinnahmen);
                 System.out.println("Tageseinnahmen = " + tageseinnahmen);
                 break;
+
             case "Wocheneinnahmen":
                 Double wocheneinnahmen = new Wocheneinnahmen().einnahmenBerechnen(parkhaus.toStream());
                 out.println(wocheneinnahmen);
                 System.out.println("Wocheneinnahmen = " + wocheneinnahmen);
                 break;
+
             case "config":
                 int Max = 10;
                 out.println(Max + ",5,23,100,10");
                 break;
 
             case "cars":
-
                 out.println(parkhaus.asIDString());
                 break;
 
             case "Parkdauerdiagramm":
-
                 JsonObject root = Json.createObjectBuilder()
                         .add("data", Json.createArrayBuilder()
                                 .add(Json.createObjectBuilder()
@@ -103,7 +106,6 @@ public class DemoServlet extends HttpServlet {
                                         .add("type", "bar")
                                         .add("name", "Duration")
                                 )
-
                         ).build();
                 out.println(root.toString());
                 System.out.println(root.toString());
@@ -114,7 +116,7 @@ public class DemoServlet extends HttpServlet {
                         .add("data", Json.createArrayBuilder()
                                 .add(Json.createObjectBuilder()
                                         .add("values", parkhaus.asCategories())
-                                        .add("labels", Json.createArrayBuilder().add("any").add("Familie").add("Frauen").add("Eingeschraenkte"))
+                                        .add("labels", Json.createArrayBuilder().add("beliebig").add("Familie").add("Frauen").add("Eingeschraenkte"))
                                         .add("type", "pie")
                                         .add("name", "Duration")
                                 )

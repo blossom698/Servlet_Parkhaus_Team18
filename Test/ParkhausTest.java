@@ -21,7 +21,7 @@ class ParkhausTest {
         parkhaus2= new Parkhaus(10);
         Car a1 = new Car(1, d.getTime(),  1, "Frauen");
         Car a2 = new Car(2, d.getTime(),  2, "Familie");
-        Car a3 = new Car(3, d.getTime(),  4, "any");
+        Car a3 = new Car(3, d.getTime(),  4, "beliebig");
 
         parkhaus2.einparken(a1);
         parkhaus2.einparken(a2);

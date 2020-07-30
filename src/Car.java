@@ -6,9 +6,9 @@ public class Car {
 
     int id;
     long ankunft;
-    long dauer=0;
+    long dauer=0; //bei Ankunft im Parkhaus unbekannt
     int platz;
-    double betrag=0;
+    double betrag=0; //bei Ankunft im Parkhaus unbekannt
     String kategorie;
 
     public Car(int id, long ankunft, int platz, String kat) {
@@ -19,6 +19,10 @@ public class Car {
         kategorie=kat;
     }
 
+    /*
+     * Wenn das Auto das Parkhaus verlässt, dann kann der Betrag und die Parkdauer
+     * dokumentiert werden.
+     */
     public void setDauer_Betrag(double betrag, long dauer) {
         this.betrag=betrag;
         this.dauer=dauer;
