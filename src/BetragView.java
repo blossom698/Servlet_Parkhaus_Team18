@@ -1,6 +1,6 @@
 public class BetragView implements IView {
 
-    Parkhaus phaus;
+    Parkhaus parkhaus;
     double betrag;
 
     @Override
