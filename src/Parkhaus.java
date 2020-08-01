@@ -10,7 +10,7 @@ public class Parkhaus implements IModel {
     private Car[] autos; //aktuell parkende Autos
     private List<Car> eintraege; //Datenbank der Autos die jemals da waren (und nicht parkend)
     private int freiePlaetze;
-    private List<IView> views; //TODO: Herausfinden, was das war.
+    private List<IView> views; 
 
 
     public Parkhaus(int groesse) {
@@ -31,6 +31,7 @@ public class Parkhaus implements IModel {
                 break;
             }
         }
+        benachrichtigeviews();
     }
 
     /*
@@ -50,7 +51,7 @@ public class Parkhaus implements IModel {
                 System.out.println("------ ID nicht gefunden, sehet her. ------");
             }
         }
-
+        benachrichtigeviews();
     }
 
     public JsonArrayBuilder asNrArray() {
@@ -99,10 +100,15 @@ public class Parkhaus implements IModel {
     /*
      * Streamt die Einträge-Liste
      */
-    public Stream<Car> toStream() {
+    public Stream<Car> eintraegeToStream() {
         return eintraege.stream();
     }
-
+/*
+    gibBetrag() wird nicht mehr implementiert aber es könnte uns noch nützlich sein
+    public Stream<Car> parkhausToStream() {
+        return Stream.of(autos);
+    }
+*/
 
     /*
      * Verändert die Größe des Arrays, wenn wir das Array größer machen wollen. Wenn es kleiner gemacht
@@ -147,26 +153,14 @@ public class Parkhaus implements IModel {
     }
 
     @Override
-    public void benachichtigeviews() {
+    public void benachrichtigeviews() {
         for (IView v : views) {
             v.aktualisieren();
         }
     }
+
 /*
-
     @Override
-    public double gibTagesseinnahmen() {
-        return new Tageseinnahmen().einnahmenBerechnen(this.toStream());
-    }
-
-    @Override
-    public double gibWocheneinnahmen() {
-        return new Wocheneinnahmen().einnahmenBerechnen(this.toStream());
-    }
-
-*/
-    @Override
-    //TODO: Passt ja nicht wirklich. Warum müssen wir das seperat noch machen, wenn das Script das schon kann?
     public double gibBetrag(int id) {
 
         for (int i = 0; i < autos.length; i++) {
@@ -182,6 +176,7 @@ public class Parkhaus implements IModel {
 
         return -1;
     }
+*/
 
     @Override
     public int gibfreieplaetze() {

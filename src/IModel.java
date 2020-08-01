@@ -6,14 +6,10 @@ public interface IModel  {
 
     public void abmelden(IView view);
 
-    public void benachichtigeviews();
+    public void benachrichtigeviews();
 
-/*
-    public double gibTagesseinnahmen();
-    public double gibWocheneinnahmen();
-*/
-    public Stream<Car> toStream();
-    public double gibBetrag(int index);
+    public Stream<Car> eintraegeToStream();
+//    public Stream<Car> parkhausToStream(); war für gibBetrag() gedacht, vill für was anderes gut.
     public int gibfreieplaetze();
 
 }

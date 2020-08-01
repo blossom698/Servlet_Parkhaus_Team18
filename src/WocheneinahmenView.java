@@ -5,6 +5,11 @@ public class WocheneinahmenView implements IView {
 
     @Override
     public void aktualisieren() {
-        einahmenw= new Wocheneinnahmen().einnahmenBerechnen(parkhaus.toStream());
+        einahmenw= new Wocheneinnahmen().einnahmenBerechnen(parkhaus.eintraegeToStream());
+    }
+
+    @Override
+    public double getValue() {
+        return einahmenw;
     }
 }

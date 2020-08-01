@@ -58,32 +58,39 @@ public class DemoServlet extends HttpServlet {
 
         switch (request.getParameter("cmd")) {
             case "Summe":
-                Double sum = parkhaus.toStream().mapToDouble(x->x.betrag).sum();
+                Double sum = parkhaus.eintraegeToStream().mapToDouble(x->x.betrag).sum();
                 out.println(sum);
                 System.out.println("sum = " + sum);
                 break;
 
             case "Durchschnittlicher Betrag":
                 //Runden auf zwei Nachkommastellen, wegen Euro bzw. Centanzahl (Erst auf Cent bringen, dann den Rest abschneiden, dann auf Euro wieder wechseln).
-                Double avg = ((int)(parkhaus.toStream().mapToDouble(x->x.betrag).average().orElse(0.0)*100))/100.0;
+                Double avg = ((int)(parkhaus.eintraegeToStream().mapToDouble(x->x.betrag).average().orElse(0.0)*100))/100.0;
                 out.println(avg);
                 System.out.println("Durchschnittlicher Betrag = " + avg);
                 break;
 
             case "Durchschnittliche Parkzeit":
-                Double avg_time = ((int)(parkhaus.toStream().mapToDouble(x->x.dauer).average().orElse(0.0)*100))/100.0;
+                Double avg_time = ((int)(parkhaus.eintraegeToStream().mapToDouble(x->x.dauer).average().orElse(0.0)*100))/100.0;
                 out.println(avg_time);
                 System.out.println("Durchschnittliche Parkzeit = " + avg_time);
                 break;
 
             case "Tageseinnahmen":
-                Double tageseinnahmen = new Tageseinnahmen().einnahmenBerechnen(parkhaus.toStream());
+                IView tmp =(IView) getApplication().getAttribute("TageseinnahmenView");
+                if(tmp==null){
+                    tmp = new TageseinnahmenView();
+                    getApplication().setAttribute("TageseinnahmenView", tmp);
+                    parkhaus.anmelden(tmp);
+                    parkhaus.benachrichtigeviews();
+                }
+                Double tageseinnahmen = tmp.getValue();
                 out.println(tageseinnahmen);
                 System.out.println("Tageseinnahmen = " + tageseinnahmen);
                 break;
 
             case "Wocheneinnahmen":
-                Double wocheneinnahmen = new Wocheneinnahmen().einnahmenBerechnen(parkhaus.toStream());
+                Double wocheneinnahmen = new Wocheneinnahmen().einnahmenBerechnen(parkhaus.eintraegeToStream());
                 out.println(wocheneinnahmen);
                 System.out.println("Wocheneinnahmen = " + wocheneinnahmen);
                 break;
