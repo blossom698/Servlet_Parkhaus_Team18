@@ -1,6 +1,7 @@
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
@@ -39,9 +40,7 @@ public class Parkhaus implements IModel {
      */
     public void verlassen(int id, double betrag, long dauer) {
         for (int i = 0; i < autos.length; i++) {
-            if (autos[i] == null && i != autos.length - 1) { //TODO: Ausprobieren, ob das notwendig ist.
-                continue;
-            } else if (autos[i] != null && autos[i].id == id) {
+            if (autos[i] != null && autos[i].id == id) {
                 autos[i].setDauer_Betrag(betrag, dauer);
                 eintraege.add(autos[i]);
                 autos[i] = null;

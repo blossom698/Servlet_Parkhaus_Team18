@@ -45,6 +45,15 @@ public class DemoServlet extends HttpServlet {
                 p.verlassen(Integer.parseInt(params[1]), Double.parseDouble(params[4])/100.0, Long.parseLong(params[3]));
                 break;
 
+            case "occupied":
+                /* Da die Nachrichten in der Form "occupied, car(25)" ankommen, und wir in params[1]
+                    nur noch "Car(25)" stehen haben und die ID isolieren wollen, so spliten wir erst
+                    bei "(" und dann bei ")" wobei diese doppelten backslashes für ein Backslash stehen.
+                    Ergebnis beim Beispiel: 25 im parseInt.
+                */
+                int id = Integer.parseInt(params[1].split("\\(")[1].split("\\)")[0]);
+                p.verlassen(id, 0,0);
+                break;
         }
     }
 

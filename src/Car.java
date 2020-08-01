@@ -62,4 +62,8 @@ public class Car {
         return j;
     }
 
+    public String toString() {
+        return ""+id;
+    }
+
 }
