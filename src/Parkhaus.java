@@ -153,7 +153,6 @@ public class Parkhaus implements IModel {
         }
     }
 
-/*
     @Override
     public double gibTagesseinnahmen() {
         return new Tageseinnahmen().einnahmenBerechnen(this.toStream());
@@ -163,9 +162,9 @@ public class Parkhaus implements IModel {
     public double gibWocheneinnahmen() {
         return new Wocheneinnahmen().einnahmenBerechnen(this.toStream());
     }
-*/
 
     @Override
+    //TODO: Passt ja nicht wirklich. Warum müssen wir das seperat noch machen, wenn das Script das schon kann?
     public double gibBetrag(int id) {
 
         for (int i = 0; i < autos.length; i++) {

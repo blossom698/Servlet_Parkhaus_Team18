@@ -1,5 +1,3 @@
-import java.util.stream.Stream;
-
 public interface IModel  {
 
     public void anmelden(IView view);
@@ -8,9 +6,8 @@ public interface IModel  {
 
     public void benachichtigeviews();
 
-//    public double gibTagesseinnahmen();
-//    public double gibWocheneinnahmen();
-    public Stream<Car> toStream();
+    public double gibTagesseinnahmen();
+    public double gibWocheneinnahmen();
     public double gibBetrag(int index);
     public int gibfreieplaetze();
 

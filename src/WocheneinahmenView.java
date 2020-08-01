@@ -1,10 +1,10 @@
 public class WocheneinahmenView implements IView {
 
-    Parkhaus parkhaus;
+    Parkhaus parkh;
     double einahmenw;
 
     @Override
     public void aktualisieren() {
-        einahmenw = new Wocheneinnahmen().einnahmenBerechnen(parkhaus.toStream());
+        einahmenw=parkh.gibWocheneinnahmen();
     }
 }
