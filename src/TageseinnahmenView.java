@@ -1,4 +1,7 @@
-public class TageseinnahmenView implements IView {
+import java.util.Date;
+import java.util.function.Predicate;
+
+public class TageseinnahmenView extends Einnahmen implements IView {
 
     double tageseinnahmen = 0.0;
     Parkhaus parkhaus;
@@ -9,10 +12,21 @@ public class TageseinnahmenView implements IView {
 
     @Override
     public void aktualisieren() {
-        tageseinnahmen = new Tageseinnahmen().einnahmenBerechnen(parkhaus.eintraegeToStream());
+        tageseinnahmen = einnahmenBerechnen(parkhaus.eintraegeToStream());
     }
 
+    @Override
     public double getValue(){
         return tageseinnahmen;
+    }
+
+    protected Predicate<Car> Zeitfilter() {
+        return (x -> ((x.ankunft + x.dauer)) / (1000 * 60 * 60 * 24) == (new Date().getTime() / (1000 * 60 * 60 * 24)));
+    }
+
+    protected void zusatz() {
+
+        System.out.println("Tageseinnahmen: ");
+
     }
 }
