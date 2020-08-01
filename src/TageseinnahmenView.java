@@ -6,6 +6,6 @@ public class TageseinnahmenView implements IView {
 
     @Override
     public void aktualisieren() {
-        tageseinnahmen = parkhaus.gibTagesseinnahmen();
+        tageseinnahmen = new Tageseinnahmen().einnahmenBerechnen(parkhaus.toStream());
     }
 }
