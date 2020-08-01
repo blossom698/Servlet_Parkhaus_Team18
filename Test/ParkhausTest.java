@@ -31,6 +31,7 @@ class ParkhausTest {
         parkhaus2.verlassen(3,8300,300);
     }
 
+    /*
     @Test
     @DisplayName("Ein Auto soll korrekt ein- und ausgeparkt werden")
     public void test_ein_ausparken(){
@@ -39,7 +40,7 @@ class ParkhausTest {
         assertEquals(9, parkhaus.gibfreieplaetze());
         parkhaus.verlassen(1, 1.0,3L);
         assertEquals(10, parkhaus.gibfreieplaetze());
-    }
+    }*/
 
     @Test
     @DisplayName("asNrArray soll die IDs aller Autos ausgeben")

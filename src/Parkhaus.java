@@ -102,12 +102,14 @@ public class Parkhaus implements IModel {
     public Stream<Car> eintraegeToStream() {
         return eintraege.stream();
     }
-/*
-    gibBetrag() wird nicht mehr implementiert aber es könnte uns noch nützlich sein
+
+    /*
+     * Streamt die aktuell parkenden Autos.
+     */
     public Stream<Car> parkhausToStream() {
         return Stream.of(autos);
     }
-*/
+
 
     /*
      * Verändert die Größe des Arrays, wenn wir das Array größer machen wollen. Wenn es kleiner gemacht
@@ -175,10 +177,11 @@ public class Parkhaus implements IModel {
 
         return -1;
     }
-*/
+
 
     @Override
     public int gibfreieplaetze() {
         return freiePlaetze;
     }
+*/
 }

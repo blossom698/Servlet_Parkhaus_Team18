@@ -9,7 +9,7 @@ public interface IModel  {
     public void benachrichtigeviews();
 
     public Stream<Car> eintraegeToStream();
-//    public Stream<Car> parkhausToStream(); war für gibBetrag() gedacht, vill für was anderes gut.
-    public int gibfreieplaetze();
+    public Stream<Car> parkhausToStream();
+   // public int gibfreieplaetze();
 
 }

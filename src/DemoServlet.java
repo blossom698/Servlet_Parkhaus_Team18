@@ -86,7 +86,7 @@ public class DemoServlet extends HttpServlet {
                 break;
 
             case "Tageseinnahmen":
-                tmp =(IView) getApplication().getAttribute("TageseinnahmenView");
+                tmp = (IView) getApplication().getAttribute("TageseinnahmenView");
                 if(tmp==null){
                     tmp = new TageseinnahmenView(parkhaus);
                     getApplication().setAttribute("TageseinnahmenView", tmp);
@@ -99,7 +99,7 @@ public class DemoServlet extends HttpServlet {
                 break;
 
             case "Wocheneinnahmen":
-                tmp =(IView) getApplication().getAttribute("WocheneinnahmenView");
+                tmp = (IView) getApplication().getAttribute("WocheneinnahmenView");
                 if(tmp==null){
                     tmp = new WocheneinnahmenView(parkhaus);
                     getApplication().setAttribute("WocheneinnahmenView", tmp);
@@ -109,6 +109,19 @@ public class DemoServlet extends HttpServlet {
                 Double wocheneinnahmen = tmp.getValue();
                 out.println(wocheneinnahmen);
                 System.out.println("Wocheneinnahmen = " + wocheneinnahmen);
+                break;
+
+            case "Anzahl freier Plaetze":
+                tmp = (IView) getApplication().getAttribute("FreieplaetzeView");
+                if(tmp==null){
+                    tmp = new FreieplaetzeView(parkhaus);
+                    getApplication().setAttribute("FreieplaetzeView", tmp);
+                    parkhaus.anmelden(tmp);
+                    parkhaus.benachrichtigeviews();
+                }
+                int frei = (int) tmp.getValue();
+                out.println(frei);
+                System.out.println("FreieplaetzeView = " + frei);
                 break;
 
             case "config":

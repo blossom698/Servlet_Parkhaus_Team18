@@ -19,7 +19,7 @@
           server_url="${pageContext.request.contextPath}/DemoServlet"
           license_max="30"
           client_categories='["Eingeschraenkte","Frauen","Familie","beliebig","beliebig","beliebig","beliebig","beliebig","beliebig","beliebig","beliebig","beliebig"]'
-          extra_buttons='["Summe","Durchschnittlicher Betrag","Durchschnittliche Parkzeit","Tageseinnahmen","Wocheneinnahmen"]'
+          extra_buttons='["Summe","Durchschnittlicher Betrag","Durchschnittliche Parkzeit","Tageseinnahmen","Wocheneinnahmen","Anzahl freier Plaetze"]'
           extra_charts='["Parkdauerdiagramm","Parkplatzbesetzungsdiagramm"]'>
 
   </ccm-parkhaus-9-0-0>
