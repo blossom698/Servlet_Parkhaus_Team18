@@ -88,7 +88,7 @@ class ParkhausTest {
         } catch (Exception e) {}
         assertEquals(0,parkhaus2.gibWocheneinnahmen());
     }
-*/
+
     @Test
     @DisplayName("gibBetrag soll die korrekten Werte nach gewissen Zeiten liefern.")
     public void gibBetrag_test() {
@@ -103,5 +103,5 @@ class ParkhausTest {
         } catch (Exception e) {}
         System.out.println(parkhaus.gibBetrag(4));
     }
-
+*/
 }

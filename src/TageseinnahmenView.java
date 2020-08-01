@@ -1,8 +1,11 @@
 public class TageseinnahmenView implements IView {
 
-    double tageseinnahmen;
+    double tageseinnahmen = 0.0;
     Parkhaus parkhaus;
 
+    public TageseinnahmenView(Parkhaus p) {
+        parkhaus = p;
+    }
 
     @Override
     public void aktualisieren() {

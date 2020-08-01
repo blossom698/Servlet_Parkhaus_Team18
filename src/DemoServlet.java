@@ -55,7 +55,7 @@ public class DemoServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
         Parkhaus parkhaus = (Parkhaus) getApplication().getAttribute("parkhaus");
-
+        IView tmp;
         switch (request.getParameter("cmd")) {
             case "Summe":
                 Double sum = parkhaus.eintraegeToStream().mapToDouble(x->x.betrag).sum();
@@ -77,9 +77,9 @@ public class DemoServlet extends HttpServlet {
                 break;
 
             case "Tageseinnahmen":
-                IView tmp =(IView) getApplication().getAttribute("TageseinnahmenView");
+                tmp =(IView) getApplication().getAttribute("TageseinnahmenView");
                 if(tmp==null){
-                    tmp = new TageseinnahmenView();
+                    tmp = new TageseinnahmenView(parkhaus);
                     getApplication().setAttribute("TageseinnahmenView", tmp);
                     parkhaus.anmelden(tmp);
                     parkhaus.benachrichtigeviews();
@@ -90,7 +90,14 @@ public class DemoServlet extends HttpServlet {
                 break;
 
             case "Wocheneinnahmen":
-                Double wocheneinnahmen = new Wocheneinnahmen().einnahmenBerechnen(parkhaus.eintraegeToStream());
+                tmp =(IView) getApplication().getAttribute("WocheneinnahmenView");
+                if(tmp==null){
+                    tmp = new WocheneinnahmenView(parkhaus);
+                    getApplication().setAttribute("WocheneinnahmenView", tmp);
+                    parkhaus.anmelden(tmp);
+                    parkhaus.benachrichtigeviews();
+                }
+                Double wocheneinnahmen = tmp.getValue();
                 out.println(wocheneinnahmen);
                 System.out.println("Wocheneinnahmen = " + wocheneinnahmen);
                 break;
