@@ -117,14 +117,22 @@ public class Parkhaus implements IModel {
      * wird).
      */
     public void changeSize(int size) {
-        //TODO: Freie Plätze anpassen.
-        if (size > autos.length) {
 
+        if (size > autos.length) {
+            freiePlaetze=freiePlaetze+(size-autos.length);
             Car[] autos_new = new Car[size];
             for (int i = 0; i < size; i++) {
-                autos_new[i] = autos_new[i];
+                autos_new[i] = autos[i];
             }
             autos = autos_new;
+        }else if(size < autos.length){
+            freiePlaetze=0;
+            for(int i=0;i<autos.length-(autos.length-size);i++){
+                if(autos[i]==null){
+                    freiePlaetze++;
+                }
+            }
+
         }
 
     }

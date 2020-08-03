@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 public class WocheneinnahmenView extends Einnahmen implements IView {
 
     Parkhaus parkhaus;
-    double einahmenw = 0.0;
+    private double einahmenw = 0.0;
 
     public WocheneinnahmenView(Parkhaus p) {
         parkhaus = p;

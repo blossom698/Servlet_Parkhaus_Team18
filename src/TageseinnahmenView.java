@@ -3,7 +3,7 @@ import java.util.function.Predicate;
 
 public class TageseinnahmenView extends Einnahmen implements IView {
 
-    double tageseinnahmen = 0.0;
+    private double tageseinnahmen = 0.0;
     Parkhaus parkhaus;
 
     public TageseinnahmenView(Parkhaus p) {

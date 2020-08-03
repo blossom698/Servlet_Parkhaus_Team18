@@ -72,6 +72,7 @@ class ParkhausTest {
         assertEquals("["+(d.getTime()+100)+","+(d.getTime()+200)+","+(d.getTime()+300)+"]", (parkhaus2.asEndArray().build()).toString());
     }
 
+
 /*    @Disabled
     @Test
     @DisplayName("gibTageseinnahmen soll die korrekten Tageseinnahmen ausgaben")
