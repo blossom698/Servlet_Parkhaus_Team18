@@ -20,7 +20,7 @@
           license_max="30"
           client_categories='["Eingeschraenkte","Frauen","Familie","beliebig","beliebig","beliebig","beliebig","beliebig","beliebig","beliebig","beliebig","beliebig"]'
           extra_buttons='["Summe","Durchschnittlicher Betrag","Durchschnittliche Parkzeit","Tageseinnahmen","Wocheneinnahmen","Anzahl freier Plaetze"]'
-          extra_charts='["Parkdauerdiagramm","Parkplatzbesetzungsdiagramm"]'
+          extra_charts='["Parkdauerdiagramm","Parkplatzbesetzungsdiagramm","Fahrzeugtypendiagramm"]'
           hide_table>
 
   </ccm-parkhaus-9-1-3>

@@ -10,6 +10,7 @@ public class Car {
     int platz;
     double betrag=0; //bei Ankunft im Parkhaus unbekannt
     String kategorie;
+    Fahrzeug typ = Fahrzeug.zufalltyp(); // gibt ein zufälligen Fahrzeugtyp an
 
     public Car(int id, long ankunft, int platz, String kat) {
 
@@ -24,7 +25,7 @@ public class Car {
      * dokumentiert werden.
      */
     public void setDauer_Betrag(double betrag, long dauer) {
-        this.betrag=betrag;
+        this.betrag=betrag*typ.preis;
         this.dauer=dauer;
     }
 

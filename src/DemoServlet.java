@@ -147,6 +147,7 @@ public class DemoServlet extends HttpServlet {
                 System.out.println(root.toString());
                 break;
 
+
             case "Parkplatzbesetzungsdiagramm":
                 JsonObject root2 = Json.createObjectBuilder()
                         .add("data", Json.createArrayBuilder()
@@ -162,6 +163,20 @@ public class DemoServlet extends HttpServlet {
                 System.out.println(root2.toString());
                 break;
 
+            case "Fahrzeugtypendiagramm":
+                JsonObject root3 = Json.createObjectBuilder()
+                        .add("data", Json.createArrayBuilder()
+                                .add(Json.createObjectBuilder()
+                                        .add("values", parkhaus.asTyps())
+                                        .add("labels", Json.createArrayBuilder().add("pkw").add("pickup").add("suv").add("zweirad").add("trike").add("quad"))
+                                        .add("type", "pie")
+                                        .add("name", "Typen")
+                                )
+
+                        ).build();
+                out.println(root3.toString());
+                System.out.println(root3.toString());
+                break;
 
             default:
                 System.out.println("Invalid Command: " + request.getQueryString());

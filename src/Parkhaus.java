@@ -96,6 +96,20 @@ public class Parkhaus implements IModel {
         return j;
     }
 
+    public JsonArrayBuilder asTyps() {
+        JsonArrayBuilder j = Json.createArrayBuilder();
+
+        j.add(eintraege.stream().filter(x -> x.typ==Fahrzeug.pkw).count());
+        j.add(eintraege.stream().filter(x -> x.typ==Fahrzeug.pickup).count());
+        j.add(eintraege.stream().filter(x -> x.typ==Fahrzeug.suv).count());
+        j.add(eintraege.stream().filter(x -> x.typ==Fahrzeug.zweirad).count());
+        j.add(eintraege.stream().filter(x -> x.typ==Fahrzeug.trike).count());
+        j.add(eintraege.stream().filter(x -> x.typ==Fahrzeug.quad).count());
+
+
+        return j;
+    }
+
     /*
      * Streamt die Einträge-Liste
      */
