@@ -12,16 +12,17 @@
   </head>
   <body>
 
-  <script src='https://ccmjs.github.io/mkaul-components/parkhaus/versions/ccm.parkhaus-9.0.0.js'>
-  </script>
+  <script src="https://ccmjs.github.io/mkaul-components/parkhaus/versions/ccm.parkhaus-9.1.3.js"></script>
 
-  <ccm-parkhaus-9-0-0
+  <ccm-parkhaus-9-1-3
           server_url="${pageContext.request.contextPath}/DemoServlet"
+          name="Parkhaus"
           license_max="30"
           client_categories='["Eingeschraenkte","Frauen","Familie","beliebig","beliebig","beliebig","beliebig","beliebig","beliebig","beliebig","beliebig","beliebig"]'
           extra_buttons='["Summe","Durchschnittlicher Betrag","Durchschnittliche Parkzeit","Tageseinnahmen","Wocheneinnahmen","Anzahl freier Plaetze"]'
-          extra_charts='["Parkdauerdiagramm","Parkplatzbesetzungsdiagramm"]'>
+          extra_charts='["Parkdauerdiagramm","Parkplatzbesetzungsdiagramm"]'
+          hide_table>
 
-  </ccm-parkhaus-9-0-0>
+  </ccm-parkhaus-9-1-3>
   </body>
 </html>
